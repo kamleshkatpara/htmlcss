@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #\31 \ {
+        color: red;
+      }
+
+      div {
+        display: flex;
+        justify-content: center;
+        height: 10vh;
+        align-items: center;
+      }
+
+      fieldset {
+        display: block;
+        margin-left: 2px;
+        margin-right: 2px;
+        padding-top: 0.35em;
+        padding-bottom: 0.625em;
+        padding-left: 0.75em;
+        padding-right: 0.75em;
+        border: 10px groove !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="1 ">tezt</div>
+
+    <div id="1 ">tezt</div>
+    <form>
+      <fieldset>
+        <legend>Personalia:</legend>
+        <div>
+          <label for="fname">First Name: </label>
+          <input type="text" name="fname" id="fname" />
+        </div>
+
+        <div>
+          <label for="lname">Last Name: </label>
+          <input type="text" name="lname" id="lname" />
+        </div>
+
+        <div>
+          <label>Select favourite language: </label>
+          <input type="radio" id="html" name="fav_language" value="HTML" />
+          <label for="html">HTML</label><br />
+          <input type="radio" id="css" name="fav_language" value="CSS" />
+          <label for="css">CSS</label><br />
+          <input
+            type="radio"
+            id="javascript"
+            name="fav_language"
+            value="JavaScript"
+          />
+          <label for="javascript">JavaScript</label>
+        </div>
+
+        <div>
+          <label>Select favourite vehicle: </label>
+          <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
+          <label for="vehicle1"> I have a bike</label><br />
+          <input type="checkbox" id="vehicle2" name="vehicle2" value="Car" />
+          <label for="vehicle2"> I have a car</label><br />
+          <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat" />
+          <label for="vehicle3"> I have a boat</label>
+        </div>
+
+        <div>
+          <label for="cars">Choose a car:</label>
+          <select id="cars" name="cars" size="4" multiple>
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="fiat">Fiat</option>
+            <option value="audi">Audi</option>
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="fiat">Fiat</option>
+            <option value="audi">Audi</option>
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="fiat">Fiat</option>
+            <option value="audi">Audi</option>
+          </select>
+        </div>
+
+        <div>
+          <textarea name="message" rows="5" cols="60">content</textarea>
+        </div>
+
+        <div>
+          <input list="browsers" />
+          <datalist id="browsers">
+            <option value="Edge"></option>
+            <option value="Firefox"></option>
+            <option value="Chrome"></option>
+            <option value="Opera"></option>
+            <option value="Safari"></option>
+          </datalist>
+        </div>
+
+        <div><input type="submit" value="Submit" /></div>
+      </fieldset>
+    </form>
+    <script>
+      console.log(document.forms);
+    </script>
+  </body>
+</html>
