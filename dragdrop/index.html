@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  #menu {
+    width: 300px;
+    float: left;
+    border: 1px solid #aaaaaa;
+    padding: 10px;
+    margin-right: 10px;
+  }
+  #menu-items {
+    margin-top: 20px;
+  }
+  #droppable {
+    width: 350px;
+    border: 1px solid #aaaaaa;
+    padding: 10px;
+    overflow: auto;
+  }
+  .draggable {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #cccccc;
+    background-color: #f9f9f9;
+    cursor: move;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .close {
+    cursor: pointer;
+    padding: 0 5px;
+  }
+  #droppable .header {
+    margin-bottom: 10px;
+  }
+  #save-menu-button {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #0073aa;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  #save-menu-button:hover {
+    background-color: #005885;
+  }
+  .menu-section {
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div id="menu">
+  <p>Add menu item:</p>
+  <input type="text" id="itemName" placeholder="Enter menu item">
+  <button onclick="addMenuItem()">Submit</button>
+
+  <div id="menu-items"></div>
+  
+  <button id="add-to-menu-button" style="display: none;" onclick="addSelectedItemsToMenu()">Add to menu</button>
+</div>
+
+<div id="droppable" class="dropzone">
+  <div class="header">Menu Structure:</div>
+  <div class="menu-section" id="menu-section">
+    <p>Drop items here:</p>
+  </div>
+  <button id="save-menu-button" onclick="saveMenuOrder()">Save Menu</button>
+</div>
+
+<script>
+  function allowDrop(ev) {
+    ev.preventDefault();
+  }
+
+  function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+  }
+
+  function drop(ev) {
+    ev.preventDefault();
+    let data = ev.dataTransfer.getData("text");
+    let draggedElement = document.getElementById(data);
+    let target = ev.target;
+
+    // Ensure the drop target is a valid container (droppable)
+    while (!target.classList.contains('dropzone') && target !== document.body) {
+      target = target.parentNode;
+    }
+
+    if (target.classList.contains('dropzone')) {
+      document.getElementById('menu-section').appendChild(draggedElement);
+      saveMenuOrder();
+    }
+  }
+
+  function initDraggableItems() {
+    let draggableItems = document.querySelectorAll('.draggable');
+    draggableItems.forEach(function(item) {
+      item.addEventListener('dragstart', drag);
+    });
+
+    let dropZones = document.querySelectorAll('.dropzone');
+    dropZones.forEach(function(zone) {
+      zone.addEventListener('dragover', allowDrop);
+      zone.addEventListener('drop', drop);
+    });
+  }
+
+  function addMenuItem() {
+    let itemName = document.getElementById('itemName').value;
+    if (itemName === "") {
+      alert("Please enter a menu item name.");
+      return;
+    }
+
+    let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+    let itemId = menuItems.length ? menuItems[menuItems.length - 1].id + 1 : 1;
+
+    // Store in localStorage
+    menuItems.push({ id: itemId, name: itemName });
+    localStorage.setItem('menuItems', JSON.stringify(menuItems));
+
+    // Add to the left side
+    addMenuItemToDOM(itemId, itemName, false);
+    document.getElementById('itemName').value = ""; // Clear input
+  }
+
+  function addMenuItemToDOM(id, name, draggable = true) {
+    let newItem = document.createElement('div');
+    newItem.id = id;
+    newItem.className = 'draggable';
+    if (draggable) {
+      newItem.draggable = true;
+      newItem.innerHTML = `${name} <span class="close" onclick="removeMenuItem(${id})">&times;</span>`;
+    } else {
+      newItem.innerHTML = `<input type="checkbox" id="checkbox-${id}" value="${id}"> ${name}`;
+    }
+
+    if (draggable) {
+      newItem.addEventListener('dragstart', drag);
+      document.getElementById('menu-section').appendChild(newItem);
+    } else {
+      document.getElementById('menu-items').appendChild(newItem);
+      toggleMenuActionsVisibility();
+    }
+  }
+
+  function loadMenuItems() {
+    let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+    menuItems.forEach(function(item) {
+      addMenuItemToDOM(item.id, item.name, false);
+    });
+  }
+
+  function toggleMenuActionsVisibility() {
+    let menuItemsContainer = document.getElementById('menu-items');
+    let addButton = document.getElementById('add-to-menu-button');
+    let hasMenuItems = menuItemsContainer.children.length > 0;
+
+    menuItemsContainer.style.display = hasMenuItems ? 'block' : 'none';
+    addButton.style.display = hasMenuItems ? 'block' : 'none';
+  }
+
+  function removeMenuItem(id) {
+    let item = document.getElementById(id);
+    item.parentNode.removeChild(item);
+
+    // Update localStorage
+    let menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+    menuItems = menuItems.filter(function(item) {
+      return item.id !== id;
+    });
+    localStorage.setItem('menuItems', JSON.stringify(menuItems));
+
+    toggleMenuActionsVisibility();
+  }
+
+  function addSelectedItemsToMenu() {
+    let checkboxes = document.querySelectorAll('#menu-items input[type="checkbox"]:checked');
+    checkboxes.forEach(function(checkbox) {
+      let id = checkbox.value;
+      let name = checkbox.parentNode.textContent.trim();
+      addMenuItemToDOM(id, name, true);
+      checkbox.parentNode.remove();
+    });
+
+    // Clear checked checkboxes
+    checkboxes.forEach(function(checkbox) {
+      checkbox.checked = false;
+    });
+
+    toggleMenuActionsVisibility();
+  }
+
+  function saveMenuOrder() {
+    let menuOrder = [];
+    let items = document.querySelectorAll('#menu-section .draggable');
+    items.forEach(function(item) {
+      menuOrder.push({ id: item.id, name: item.textContent.trim().replace('×', '') });
+    });
+    localStorage.setItem('menuOrder', JSON.stringify(menuOrder));
+  }
+
+  function loadMenuOrder() {
+    let menuOrder = JSON.parse(localStorage.getItem('menuOrder')) || [];
+    menuOrder.forEach(function(item) {
+      addMenuItemToDOM(item.id, item.name, true);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    initDraggableItems();
+    loadMenuItems();
+    loadMenuOrder();
+    toggleMenuActionsVisibility();
+
+    document.getElementById('itemName').addEventListener('keyup', function(event) {
+      if (event.key === 'Enter') {
+        addMenuItem();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

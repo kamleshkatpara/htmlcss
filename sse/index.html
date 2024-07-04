@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginContainer = document.getElementById('login-container');
+            const chatContainer = document.getElementById('chat-container');
+            const usernameInput = document.getElementById('username');
+            const loginButton = document.getElementById('login');
+
+            const chat = document.getElementById('chat');
+            const input = document.getElementById('input');
+            const sendButton = document.getElementById('send');
+
+            let username = '';
+
+            loginButton.addEventListener('click', () => {
+                username = usernameInput.value.trim();
+                if (username) {
+                    loginContainer.style.display = 'none';
+                    chatContainer.style.display = 'flex';
+                    startChat();
+                }
+            });
+
+            function startChat() {
+                if (typeof (EventSource) !== 'undefined') {
+                    const source = new EventSource('http://localhost:8080/events');
+                    source.onmessage = (e) => {
+                        const data = JSON.parse(e.data);
+                        const messageElem = document.createElement('div');
+                        messageElem.classList.add('message');
+                        if (data.username === username) {
+                            messageElem.classList.add('sent');
+                        } else {
+                            messageElem.classList.add('received');
+                        }
+                        messageElem.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
+                        chat.appendChild(messageElem);
+                        chat.scrollTop = chat.scrollHeight;
+                    };
+                } else {
+                    chat.innerHTML = 'Sorry, your browser does not support server-sent events...';
+                }
+
+                sendButton.addEventListener('click', () => {
+                    const message = input.value;
+                    if (message.trim() !== '') {
+                        fetch('http://localhost:8080/message', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ username, message })
+                        });
+                        input.value = '';
+                    }
+                });
+
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendButton.click();
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <div id="login-container">
+        <input type="text" id="username" placeholder="Enter your username">
+        <button id="login">Login</button>
+    </div>
+    <div id="chat-container" style="display:none;">
+        <div id="chat"></div>
+        <div id="input-container">
+            <input type="text" id="input" placeholder="Type a message...">
+            <button id="send">Send</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enhanced Paint App</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        height: 100vh;
+        justify-content: center;
+        background: #f0f0f0;
+      }
+      canvas {
+        border: 1px solid black;
+        background-color: white;
+      }
+      #controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .control-group {
+        margin-bottom: 5px;
+      }
+      .shape-btn {
+        font-size: 24px;
+        cursor: pointer;
+        margin: 0 5px;
+        padding: 5px;
+      }
+      .shape-btn.selected {
+        background-color: lightgray;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <div class="control-group">
+        <button id="clearBtn">🧹</button>
+        <button id="saveBtn">💾</button>
+      </div>
+      <div class="control-group">
+        <button class="shape-btn" id="freeDrawBtn">✏️</button>
+        <button class="shape-btn" id="rectangleBtn">▭</button>
+        <button class="shape-btn" id="circleBtn">⬤</button>
+        <button class="shape-btn" id="triangleBtn">▲</button>
+        <button class="shape-btn" id="squareBtn">■</button>
+      </div>
+      <div class="control-group">
+        <label for="colorPicker">Color:</label>
+        <input type="color" id="colorPicker" value="#000000" />
+      </div>
+    </div>
+    <canvas id="paintCanvas" width="700" height="700"></canvas>
+    <script>
+      window.onload = function () {
+        const canvas = document.getElementById("paintCanvas");
+        const ctx = canvas.getContext("2d");
+        const colorPicker = document.getElementById("colorPicker");
+        let painting = false;
+        let startX, startY;
+        let shape = "free";
+
+        const shapeButtons = {
+          free: document.getElementById("freeDrawBtn"),
+          rectangle: document.getElementById("rectangleBtn"),
+          circle: document.getElementById("circleBtn"),
+          triangle: document.getElementById("triangleBtn"),
+          square: document.getElementById("squareBtn"),
+        };
+
+        function selectShape(selectedShape) {
+          shape = selectedShape;
+          for (const key in shapeButtons) {
+            shapeButtons[key].classList.remove("selected");
+          }
+          shapeButtons[selectedShape].classList.add("selected");
+        }
+
+        selectShape("free");
+
+        for (const key in shapeButtons) {
+          shapeButtons[key].addEventListener("click", () => selectShape(key));
+        }
+
+        // Initialize the canvas with a white background
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        function startPosition(e) {
+          painting = true;
+          startX = e.clientX - canvas.offsetLeft;
+          startY = e.clientY - canvas.offsetTop;
+          if (shape === "free") draw(e);
+        }
+
+        function endPosition(e) {
+          if (painting && shape !== "free") {
+            drawShape(e);
+          }
+          painting = false;
+          ctx.beginPath();
+        }
+
+        function draw(e) {
+          if (!painting) return;
+          ctx.lineWidth = 5;
+          ctx.lineCap = "round";
+          ctx.strokeStyle = colorPicker.value;
+
+          ctx.lineTo(
+            e.clientX - canvas.offsetLeft,
+            e.clientY - canvas.offsetTop
+          );
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(
+            e.clientX - canvas.offsetLeft,
+            e.clientY - canvas.offsetTop
+          );
+        }
+
+        function drawShape(e) {
+          const endX = e.clientX - canvas.offsetLeft;
+          const endY = e.clientY - canvas.offsetTop;
+          const width = endX - startX;
+          const height = endY - startY;
+
+          ctx.fillStyle = colorPicker.value;
+          ctx.strokeStyle = colorPicker.value;
+
+          switch (shape) {
+            case "rectangle":
+              ctx.fillRect(startX, startY, width, height);
+              break;
+            case "circle":
+              ctx.beginPath();
+              ctx.arc(
+                startX,
+                startY,
+                Math.sqrt(width ** 2 + height ** 2),
+                0,
+                Math.PI * 2
+              );
+              ctx.fill();
+              ctx.closePath();
+              break;
+            case "triangle":
+              ctx.beginPath();
+              ctx.moveTo(startX, startY);
+              ctx.lineTo(startX + width / 2, startY + height);
+              ctx.lineTo(startX - width / 2, startY + height);
+              ctx.closePath();
+              ctx.fill();
+              break;
+            case "square":
+              const side = Math.max(Math.abs(width), Math.abs(height));
+              ctx.fillRect(
+                startX,
+                startY,
+                width < 0 ? -side : side,
+                height < 0 ? -side : side
+              );
+              break;
+          }
+        }
+
+        canvas.addEventListener("mousedown", startPosition);
+        canvas.addEventListener("mouseup", endPosition);
+        canvas.addEventListener("mousemove", draw);
+
+        // Clear button functionality
+        const clearBtn = document.getElementById("clearBtn");
+        clearBtn.addEventListener("click", () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "white";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        });
+
+        // Save button functionality
+        const saveBtn = document.getElementById("saveBtn");
+        saveBtn.addEventListener("click", () => {
+          const dataURL = canvas.toDataURL("image/png");
+          const link = document.createElement("a");
+          link.href = dataURL;
+          link.download = "painting.png";
+          link.click();
+        });
+      };
+    </script>
+  </body>
+</html>
