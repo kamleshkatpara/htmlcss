@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      .container {
+        background-color: whitesmoke;
+        padding: 20px;
+        margin: 20px;
+      }
+
+      .row::after {
+        display: table;
+        clear: both;
+        content: "";
+      }
+
+      .labelCol {
+        width: 25%;
+        float: left;
+        margin-top: 5px;
+      }
+
+      .inputCol {
+        width: 75%;
+        float: left;
+        margin-top: 5px;
+      }
+
+      input[type="text"],
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        resize: vertical;
+      }
+
+      input.invalid,
+      select.invalid,
+      textarea.invalid {
+        color: red;
+        border: 1px solid red;
+      }
+
+      input.valid,
+      select.valid,
+      textarea.valid {
+        border: 1px solid green;
+      }
+
+      label {
+        display: inline-block;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        padding: 12px 12px 12px 0;
+      }
+
+      button[type="submit"] {
+        background-color: green;
+        color: white;
+        margin: 12px 0 0 0;
+        padding: 12px 20px;
+        float: right;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button[type="submit"]:hover {
+        background-color: darkgreen;
+      }
+
+      @media screen and (max-width: 600px) {
+        .labelCol,
+        .inputCol {
+          width: 100%;
+          margin-top: 0;
+        }
+
+        button[type="submit"] {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form name="myForm" id="myForm">
+        <div class="row">
+          <div class="labelCol">
+            <label for="firstname">First Name :</label>
+          </div>
+          <div class="inputCol">
+            <input
+              type="text"
+              name="firstname"
+              id="firstname"
+              placeholder="Please enter your firstname"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="labelCol">
+            <label for="lastname">Last Name :</label>
+          </div>
+          <div class="inputCol">
+            <input
+              type="text"
+              name="lastname"
+              id="lastname"
+              placeholder="Please enter your lastname"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="labelCol">
+            <label for="country">Country :</label>
+          </div>
+          <div class="inputCol">
+            <select
+              name="country"
+              id="country"
+              required
+              aria-placeholder="Please select country"
+            >
+              <option value="" disabled selected>Select Country</option>
+              <option value="australia">Australia</option>
+              <option value="canada">Canada</option>
+              <option value="usa">USA</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="labelCol"><label for="subject">Subject :</label></div>
+          <div class="inputCol">
+            <textarea
+              name="subject"
+              id="subject"
+              placeholder="Write something..."
+              style="height: 200px"
+              required
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="row"><button type="submit">Submit</button></div>
+      </form>
+    </div>
+    <script>
+      document
+        .getElementById("myForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          console.log(
+            "First Name:",
+            document.getElementById("firstname").value
+          );
+          console.log("Last Name:", document.getElementById("lastname").value);
+          console.log("Country:", document.getElementById("country").value);
+          console.log("Subject:", document.getElementById("subject").value);
+        });
+
+      document
+        .querySelectorAll("input, select, textarea")
+        .forEach(function (input) {
+          input.addEventListener("invalid", function () {
+            input.classList.add("invalid");
+            input.classList.remove("valid");
+          });
+
+          input.addEventListener("input", function () {
+            if (input.checkValidity()) {
+              input.classList.add("valid");
+              input.classList.remove("invalid");
+            } else {
+              input.classList.add("invalid");
+              input.classList.remove("valid");
+            }
+          });
+        });
+    </script>
+  </body>
+</html>
