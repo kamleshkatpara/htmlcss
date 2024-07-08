@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: cornflowerblue;
+      }
+
+      li {
+        float: left;
+      }
+
+      li a,
+      .dropBtn {
+        text-decoration: none;
+        padding: 10px 12px;
+        color: white;
+        display: inline-block;
+        text-align: center;
+      }
+
+      li a:hover,
+      .dropdown:hover .dropBtn {
+        color: cornflowerblue;
+        background-color: white;
+      }
+
+      li.dropdown {
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        min-width: 160px;
+        z-index: 1;
+      }
+
+      .dropdown-content li {
+        float: none;
+      }
+      .dropdown-content li a {
+        padding: 10px 12px;
+        display: block;
+        text-align: left;
+        text-decoration: none;
+      }
+
+      .dropdown-content a:hover {
+        background-color: white;
+        color: cornflowerblue;
+      }
+
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Services</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropBtn">About</a>
+            <ul class="dropdown-content">
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">SEO</a></li>
+              <li><a href="#">Web Design</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  </body>
+</html>
