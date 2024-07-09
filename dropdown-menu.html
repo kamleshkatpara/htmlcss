@@ -7,49 +7,71 @@
     <style>
       body {
         margin: 0;
+        padding: 0;
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: tomato;
+      }
+
+      .logo {
+        font-size: 14px;
+        color: white;
+        text-decoration: none;
       }
 
       ul {
-        list-style-type: none;
+        list-style: none;
+        display: flex;
         margin: 0;
         padding: 0;
-        overflow: hidden;
-        background-color: cornflowerblue;
+        background-color: tomato;
       }
 
       li {
-        float: left;
+        position: relative;
       }
 
       li a,
-      .dropBtn {
-        text-decoration: none;
+      .dropdownbtn {
+        font-family: Arial, Helvetica, sans-serif;
         padding: 10px 12px;
-        color: white;
-        display: inline-block;
         text-align: center;
+        color: #000;
+        text-decoration: none;
+        display: inline-block;
       }
 
       li a:hover,
-      .dropdown:hover .dropBtn {
-        color: cornflowerblue;
+      .dropdown:hover .dropdownbtn {
         background-color: white;
-      }
-
-      li.dropdown {
-        display: inline-block;
+        color: tomato;
+        border-radius: 10px;
       }
 
       .dropdown-content {
-        display: none;
+        display: block;
         position: absolute;
+        top: 100%; /* Position the dropdown exactly below the main menu */
+        right: 0;
         min-width: 160px;
         z-index: 1;
+        opacity: 0;
+        visibility: hidden;
+        background-color: white;
+        border: 1px solid tomato;
+        border-radius: 0 0 10px 10px;
+        transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
       }
 
       .dropdown-content li {
         float: none;
       }
+
       .dropdown-content li a {
         padding: 10px 12px;
         display: block;
@@ -58,23 +80,25 @@
       }
 
       .dropdown-content a:hover {
-        background-color: white;
-        color: cornflowerblue;
+        background-color: tomato;
+        color: white;
       }
 
       .dropdown:hover .dropdown-content {
-        display: block;
+        opacity: 1;
+        visibility: visible;
       }
     </style>
   </head>
   <body>
     <header>
       <nav>
+        <a href="#" class="logo">Logo</a>
         <ul>
           <li><a href="#">Home</a></li>
           <li><a href="#">Services</a></li>
           <li class="dropdown">
-            <a href="#" class="dropBtn">About</a>
+            <a href="#" class="dropdownbtn">About</a>
             <ul class="dropdown-content">
               <li><a href="#">Contact</a></li>
               <li><a href="#">SEO</a></li>
