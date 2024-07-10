@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .breadcrumb {
+        padding: 10px 20px;
+        list-style-type: none;
+        background-color: #eee;
+      }
+
+      .breadcrumb li {
+        display: inline;
+      }
+
+      .breadcrumb li a {
+        color: green;
+      }
+      .breadcrumb li+li::before {
+        padding: 5px;
+        color: black;
+        content: '/\00a0';
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Breadcrumb Pagination</h2>
+    <ul class="breadcrumb">
+      <li><a href="">Home</a></li>
+      <li><a href="">Pictures</a></li>
+      <li><a href="">Summer 15</a></li>
+      <li>Italy</li>
+    </ul>
+  </body>
+</html>
