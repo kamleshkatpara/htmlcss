@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        min-height: 100vh;
+      }
+
+      h1 {
+        font-size: 3em;
+      }
+
+      header,
+      footer {
+        width: 100%;
+        background-color: #ccc;
+        text-align: center;
+        padding: 30px;
+      }
+
+      main {
+        display: grid;
+        grid-template-rows: 1fr;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        height: 100%;
+      }
+
+      .column {
+        background-color: #ccc;
+        padding: 30px;
+        border: 1px solid black;
+        text-align: center;
+      }
+
+      @media screen and (max-width: 600px) {
+        .row {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Header</h1>
+    </header>
+    <main>
+      <div class="row">
+        <div class="column">Column</div>
+        <div class="column">Column</div>
+        <div class="column">Column</div>
+      </div>
+    </main>
+    <footer>
+      <h2>Footer</h2>
+    </footer>
+  </body>
+</html>
