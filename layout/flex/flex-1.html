@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Flex</title>
+    <style>
+      :root {
+        --gap: 4vh;
+        --padding: 4vh;
+        --color: #48cae4;
+        --mobile: 480px;
+        --tablet: 768px;
+        --desktop: 1440px;
+      }
+
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 100%;
+        min-height: 100vh;
+        font-family: sans-serif;
+        font-size: 45px;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap);
+        padding: var(--padding);
+        border: 1vh solid var(--color);
+      }
+
+      [class^="block-"] {
+        display: flex;
+        flex-direction: row;
+        height: calc((100vh - 2vh - var(--gap) * 2 - var(--padding) * 2) / 3);
+        gap: var(--gap);
+      }
+
+      @media screen and (max-width: 480px) {
+        [class^="block-"] {
+          flex-direction: column;
+          height: 500px;
+        }
+      }
+
+      [class^="box-"] {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-basis: calc(100% / 3);
+        border: 2px solid black;
+        border-radius: 10px;
+        background-color: #c1c1c1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="block-1">
+        <div class="box-1">A</div>
+        <div class="box-2">B</div>
+        <div class="box-3">C</div>
+      </div>
+      <div class="block-2">
+        <div class="box-1">D</div>
+        <div class="box-2">E</div>
+        <div class="box-3">F</div>
+      </div>
+      <div class="block-3">
+        <div class="box-1">G</div>
+        <div class="box-2">H</div>
+        <div class="box-3">I</div>
+      </div>
+    </div>
+  </body>
+</html>
