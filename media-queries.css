@@ -1,0 +1,29 @@
+/* Extra Small Devices (X-Small) - <576px */
+@media (max-width: 575.98px) {
+  /* Your CSS here */
+}
+
+/* Small Devices - ≥576px */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  /* Your CSS here */
+}
+
+/* Medium Devices - ≥768px */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  /* Your CSS here */
+}
+
+/* Large Devices - ≥992px */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  /* Your CSS here */
+}
+
+/* Extra Large Devices - ≥1200px */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  /* Your CSS here */
+}
+
+/* Extra Extra Large Devices - ≥1400px */
+@media (min-width: 1400px) {
+  /* Your CSS here */
+}
